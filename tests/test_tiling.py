@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import pytest
 
-from attention_kernel_cuda.exceptions import TilingConfigError
 from attention_kernel_cuda.models import AttentionConfig, TilingStrategy
 from attention_kernel_cuda.tiling import (
     _compute_shared_memory,

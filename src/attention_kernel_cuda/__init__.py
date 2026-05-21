@@ -6,9 +6,9 @@ performance cliffs of standard Flash Attention implementations.
 """
 
 from attention_kernel_cuda.core import (
+    FlashAttentionFunction,
     flash_attention,
     flash_attention_backward,
-    FlashAttentionFunction,
 )
 from attention_kernel_cuda.models import AttentionConfig, AttentionOutput, TilingStrategy
 from attention_kernel_cuda.tiling import compute_optimal_tiling

@@ -14,10 +14,9 @@ from __future__ import annotations
 import logging
 import math
 import time
-from typing import Optional, Tuple
 
 import torch
-import torch.nn.functional as F
+import torch.nn.functional as F  # noqa: N812
 
 from attention_kernel_cuda.exceptions import InvalidHeadDimensionError
 from attention_kernel_cuda.models import (
@@ -46,7 +45,7 @@ def _validate_inputs(
     query: torch.Tensor,
     key: torch.Tensor,
     value: torch.Tensor,
-) -> Tuple[int, int, int, int]:
+) -> tuple[int, int, int, int]:
     """Validate Q, K, V tensor shapes and return dimensions.
 
     Expected shape: [batch_size, seq_len, num_heads, head_dim]
@@ -96,7 +95,7 @@ def _reference_attention_tiled(
     value: torch.Tensor,
     config: AttentionConfig,
     tiling: TilingConfig,
-) -> Tuple[torch.Tensor, torch.Tensor]:
+) -> tuple[torch.Tensor, torch.Tensor]:
     """Reference tiled attention in pure PyTorch.
 
     Implements the same tiling logic as the CUDA kernel but in Python,
@@ -346,7 +345,7 @@ class FlashAttentionFunction(torch.autograd.Function):
     def backward(  # type: ignore[override]
         ctx: torch.autograd.function.FunctionCtx,
         grad_output: torch.Tensor,
-    ) -> Tuple[Optional[torch.Tensor], Optional[torch.Tensor], Optional[torch.Tensor], None]:
+    ) -> tuple[torch.Tensor | None, torch.Tensor | None, torch.Tensor | None, None]:
         """Backward pass recomputing attention for memory efficiency.
 
         Args:
@@ -369,11 +368,11 @@ def flash_attention(
     query: torch.Tensor,
     key: torch.Tensor,
     value: torch.Tensor,
-    head_dim: Optional[int] = None,
-    num_heads: Optional[int] = None,
+    head_dim: int | None = None,
+    num_heads: int | None = None,
     causal: bool = False,
     dropout_p: float = 0.0,
-    softmax_scale: Optional[float] = None,
+    softmax_scale: float | None = None,
     strategy: TilingStrategy = TilingStrategy.VARIABLE_BLOCK,
     return_metrics: bool = False,
 ) -> AttentionOutput:
@@ -476,7 +475,7 @@ def flash_attention_backward(
     output: torch.Tensor,
     logsumexp: torch.Tensor,
     config: AttentionConfig,
-) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
     """Backward pass for flash attention with recomputation.
 
     Recomputes attention weights block-by-block rather than storing

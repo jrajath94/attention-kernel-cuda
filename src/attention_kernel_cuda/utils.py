@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import logging
-from typing import Dict, List, Tuple
 
 import torch
 
@@ -11,7 +10,6 @@ from attention_kernel_cuda.models import (
     NON_STANDARD_HEAD_DIMS,
     STANDARD_HEAD_DIMS,
     AttentionConfig,
-    TilingStrategy,
 )
 from attention_kernel_cuda.tiling import compute_optimal_tiling
 
@@ -25,7 +23,7 @@ def generate_random_qkv(
     head_dim: int,
     dtype: torch.dtype = torch.float16,
     device: str = "cpu",
-) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
     """Generate random Q, K, V tensors for testing.
 
     Uses scaled initialization to prevent overflow in fp16 matmuls.
@@ -96,7 +94,7 @@ def compare_with_reference(
     value: torch.Tensor,
     output: torch.Tensor,
     causal: bool = False,
-) -> Dict[str, float]:
+) -> dict[str, float]:
     """Compare output against PyTorch's native attention for correctness.
 
     Args:
@@ -154,7 +152,7 @@ def estimate_memory_usage(
     head_dim: int,
     dtype: torch.dtype = torch.float16,
     algorithm: str = "flash",
-) -> Dict[str, int]:
+) -> dict[str, int]:
     """Estimate peak memory usage for different attention algorithms.
 
     Args:
@@ -207,7 +205,7 @@ def estimate_memory_usage(
         }
 
 
-def list_supported_head_dims() -> List[Dict[str, object]]:
+def list_supported_head_dims() -> list[dict[str, object]]:
     """List all supported head dimensions with their tiling metadata.
 
     Returns:

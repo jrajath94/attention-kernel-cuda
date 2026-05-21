@@ -5,7 +5,6 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Optional
 
 import torch
 
@@ -73,9 +72,7 @@ class TilingConfig:
                 max_shared_memory,
             )
             return False
-        if self.block_m < MIN_BLOCK_SIZE or self.block_n < MIN_BLOCK_SIZE:
-            return False
-        return True
+        return self.block_m >= MIN_BLOCK_SIZE and self.block_n >= MIN_BLOCK_SIZE
 
 
 @dataclass(frozen=True)
@@ -96,7 +93,7 @@ class AttentionConfig:
     num_heads: int
     causal: bool = False
     dropout_p: float = 0.0
-    softmax_scale: Optional[float] = None
+    softmax_scale: float | None = None
     strategy: TilingStrategy = TilingStrategy.VARIABLE_BLOCK
     dtype: torch.dtype = torch.float16
 

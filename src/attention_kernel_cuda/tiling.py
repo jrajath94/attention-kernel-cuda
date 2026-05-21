@@ -9,8 +9,6 @@ eliminating waste and enabling better occupancy.
 from __future__ import annotations
 
 import logging
-import math
-from typing import Dict, List
 
 from attention_kernel_cuda.exceptions import TilingConfigError
 from attention_kernel_cuda.models import (
@@ -83,7 +81,7 @@ def _find_divisors_in_range(
     head_dim: int,
     min_block: int,
     max_block: int,
-) -> List[int]:
+) -> list[int]:
     """Find values in [min_block, max_block] that evenly divide head_dim.
 
     For non-standard dims, we also include values where head_dim is a
@@ -329,10 +327,6 @@ def _compute_register_tiled(
     Returns:
         Register-optimized tiling config.
     """
-    # Smaller blocks to leave room in shared memory for double-buffering
-    target_registers_per_thread = 128  # Conservative for high occupancy
-    elem_per_thread = target_registers_per_thread // 2  # 2 regs per fp16 pair
-
     for block_m in [64, 48, 32]:
         for block_n in [64, 48, 32]:
             shared_mem = _compute_shared_memory(
@@ -357,7 +351,7 @@ def _compute_register_tiled(
     )
 
 
-def analyze_tiling_efficiency(config: AttentionConfig) -> Dict[str, float]:
+def analyze_tiling_efficiency(config: AttentionConfig) -> dict[str, float]:
     """Compare tiling efficiency across strategies for a given config.
 
     Useful for benchmarking and selecting the best strategy.
@@ -368,8 +362,7 @@ def analyze_tiling_efficiency(config: AttentionConfig) -> Dict[str, float]:
     Returns:
         Dict mapping strategy name to efficiency metrics.
     """
-    results: Dict[str, float] = {}
-    bytes_per_elem = DTYPE_BYTES.get(str(config.dtype).split(".")[-1], 2)
+    results: dict[str, float] = {}
 
     for strategy in TilingStrategy:
         try:

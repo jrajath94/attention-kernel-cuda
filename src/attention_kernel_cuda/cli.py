@@ -5,7 +5,6 @@ from __future__ import annotations
 import argparse
 import logging
 import sys
-from typing import List
 
 import torch
 
@@ -139,7 +138,7 @@ def cmd_list_dims(args: argparse.Namespace) -> None:
         )
 
 
-def main(argv: List[str] | None = None) -> None:
+def main(argv: list[str] | None = None) -> None:
     """Main CLI entry point.
 
     Args:

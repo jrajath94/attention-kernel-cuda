@@ -110,7 +110,7 @@ class AttentionConfig:
         """Effective softmax scale factor."""
         if self.softmax_scale is not None:
             return self.softmax_scale
-        return self.head_dim ** -0.5
+        return float(self.head_dim) ** -0.5
 
     @property
     def is_standard_dim(self) -> bool:

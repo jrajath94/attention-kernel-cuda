@@ -339,7 +339,7 @@ class FlashAttentionFunction(torch.autograd.Function):
         ctx.save_for_backward(query, key, value, output, logsumexp)
         ctx.config = config  # type: ignore[attr-defined]
         ctx.tiling = tiling  # type: ignore[attr-defined]
-        return output
+        return output  # type: ignore[return-value]
 
     @staticmethod
     def backward(  # type: ignore[override]
@@ -355,7 +355,7 @@ class FlashAttentionFunction(torch.autograd.Function):
         Returns:
             Gradients for (query, key, value, None).
         """
-        query, key, value, output, logsumexp = ctx.saved_tensors
+        query, key, value, output, logsumexp = ctx.saved_tensors  # type: ignore[attr-defined]
         config: AttentionConfig = ctx.config  # type: ignore[attr-defined]
 
         grad_q, grad_k, grad_v = flash_attention_backward(

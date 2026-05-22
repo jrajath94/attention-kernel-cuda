@@ -339,7 +339,7 @@ class FlashAttentionFunction(torch.autograd.Function):
         ctx.save_for_backward(query, key, value, output, logsumexp)
         ctx.config = config  # type: ignore[attr-defined]
         ctx.tiling = tiling  # type: ignore[attr-defined]
-        return output  # type: ignore[return-value]
+        return output  # type: ignore[no-any-return]
 
     @staticmethod
     def backward(  # type: ignore[override]

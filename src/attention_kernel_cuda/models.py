@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import math
 from dataclasses import dataclass, field
 from enum import Enum
 
@@ -110,7 +111,7 @@ class AttentionConfig:
         """Effective softmax scale factor."""
         if self.softmax_scale is not None:
             return self.softmax_scale
-        return float(self.head_dim) ** -0.5
+        return 1.0 / math.sqrt(float(self.head_dim))
 
     @property
     def is_standard_dim(self) -> bool:
